@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  bot:
+    restart: always
+    build:
+      context: .
+    env_file: .env
+    container_name: helper-tgtoadbot
+  redis:
+    restart: always
+    image: 'bitnami/redis:latest'
+    container_name: redis-helper-tgtoadbot
+    volumes:
+      - redis-helper-tgtoadbot:/bitnami/redis/data
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+
+volumes:
+  redis-helper-tgtoadbot:
+    name: redis-helper-tgtoadbot
+    driver: local
+
+
