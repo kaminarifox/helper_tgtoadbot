@@ -1,15 +1,18 @@
 version: '3.8'
 services:
   bot:
-    restart: always
-    build:
-      context: .
+    image: 'node:14'
     env_file: .env
-    container_name: helper-tgtoadbot
+    volumes:
+    - ./:/usr/src/app
+    working_dir: /usr/src/app
+    command: [ "npm", "run", "start" ]
+    depends_on:
+      - redis
+
   redis:
     restart: always
     image: 'bitnami/redis:latest'
-    container_name: redis-helper-tgtoadbot
     volumes:
       - redis-helper-tgtoadbot:/bitnami/redis/data
     environment:
@@ -17,7 +20,5 @@ services:
 
 volumes:
   redis-helper-tgtoadbot:
-    name: redis-helper-tgtoadbot
-    driver: local
 
 
