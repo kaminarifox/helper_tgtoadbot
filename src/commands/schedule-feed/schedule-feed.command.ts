@@ -17,19 +17,20 @@ export class ScheduleFeedCommand extends Command {
   private handle(ctx) {
     const [scheduleHours, scheduleMinutes] = ctx.update.message.text.split(' ').pop().split(':');
 
-    const nextTime = moment().hours(Number(scheduleHours)).minutes(Number(scheduleMinutes)).seconds(0);
+    const nextTime = moment().utcOffset(3).hours(Number(scheduleHours)).minutes(Number(scheduleMinutes)).seconds(0);
     if (nextTime.isBefore(moment())) {
       nextTime.add(1, 'day');
     }
 
     this.botSchedule(nextTime.toDate(), ctx.update.message.message_id);
-    ctx.reply('Кормежка запланирована на ' + nextTime.format());
+    ctx.reply('Кормежка запланирована на ' + nextTime.format('YYYY-MM-DD HH:mm'));
   }
 
   private handleAnswer(ctx) {
     if (ctx.update.message.reply_to_message.from.username === this.bot.botInfo.username) {
       const nextTime = moment().add(12, 'hours');
       this.botSchedule(nextTime.toDate(), ctx.update.message.message_id);
+      ctx.reply('Кормежка запланирована на ' + nextTime.format('YYYY-MM-DD HH:mm'));
     }
   }
 
