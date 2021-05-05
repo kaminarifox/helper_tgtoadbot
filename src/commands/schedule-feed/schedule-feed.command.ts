@@ -40,6 +40,7 @@ export class ScheduleFeedCommand extends Command {
       this.bot.telegram.sendMessage(Config.get('chatId'), 'Пришло время кормежки', {
         reply_to_message_id: fromId,
         reply_markup: {
+          selective: true,
           one_time_keyboard: true,
           resize_keyboard: true,
           keyboard: [[{text: 'Покормить жабу'}]]
