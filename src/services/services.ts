@@ -4,7 +4,7 @@ export class Services {
   private static instances: {[p: string]: any} = {}
 
   static init() {
-    Services.register(RedisService, new RedisService());
+    // Services.register(RedisService);
   }
 
   static getService<T>(classType: any) {
@@ -15,7 +15,7 @@ export class Services {
     throw new Error(`Service ${classType.name} does not instantiated`);
   }
 
-  private static register(classType: any, instance: any) {
-    Services.instances[classType.name] = instance;
+  private static register(classType: {new(): any;}) {
+    Services.instances[classType.name] = new classType;
   }
 }
