@@ -8,7 +8,7 @@ import { Config } from "../../config";
 export class ScheduleFeedCommand extends Command {
   constructor(bot: Telegraf<Context<Update>>) {
     super(bot);
-  } 
+  }
 
   init() {
     this.bot.hears(/^[Зз]апланировать (пир|кормежку) \d\d:\d\d$/, ctx => this.handle(ctx));
