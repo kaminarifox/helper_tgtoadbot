@@ -1,16 +1,33 @@
 import { Command } from '../command';
 import { Context, Telegraf } from 'telegraf';
 import { Update } from 'typegram';
-import * as schedule from 'node-schedule';
 import * as moment from 'moment';
 import { Config } from "../../config";
+import { Agenda, Job } from "agenda";
 
 export class ScheduleFeedCommand extends Command {
+  agenda: Agenda;
+
   constructor(bot: Telegraf<Context<Update>>) {
     super(bot);
+    this.agenda = new Agenda({ db: {address: Config.get('mongo.agendaAddress')} });
   }
 
   init() {
+    this.agenda.define('feedToad', async (job: Job) => {
+      const { fromId } = job.attrs.data as { fromId: number };
+      await this.bot.telegram.sendMessage(Config.get('chatId'), 'Пришло время кормежки', {
+        reply_to_message_id: fromId,
+        reply_markup: {
+          selective: true,
+          one_time_keyboard: true,
+          resize_keyboard: true,
+          keyboard: [[{text: 'Покормить жабу'}]]
+        }
+      })
+    });
+    this.agenda.start();
+
     this.bot.hears(/^[Зз]апланировать (пир|кормежку) \d\d:\d\d$/, ctx => this.handle(ctx));
     this.bot.hears('Покормить жабу', ctx => this.handleAnswer(ctx));
   }
@@ -41,17 +58,7 @@ export class ScheduleFeedCommand extends Command {
     }
   }
 
-  private botSchedule(nextTime: Date, fromId: any) {
-    const job = schedule.scheduleJob(nextTime, cb => {
-      this.bot.telegram.sendMessage(Config.get('chatId'), 'Пришло время кормежки', {
-        reply_to_message_id: fromId,
-        reply_markup: {
-          selective: true,
-          one_time_keyboard: true,
-          resize_keyboard: true,
-          keyboard: [[{text: 'Покормить жабу'}]]
-        }
-      });
-    })
+  private botSchedule(nextTime: Date, fromId: any): Promise<Job> {
+    return this.agenda.schedule(nextTime, 'feedToad', {fromId});
   }
 }
