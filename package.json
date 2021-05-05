@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node dist/main.js",
     "dev": "npx ts-node-dev --respawn -- src/main.ts",
     "build": "tsc"
   },
