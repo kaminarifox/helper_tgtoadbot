@@ -31,7 +31,8 @@ export class ScheduleFeedCommand extends Command {
     if (ctx.update.message.reply_to_message?.from.username === this.bot.botInfo?.username) {
       const nextTime = moment().add(12, 'hours');
       this.botSchedule(nextTime.toDate(), ctx.update.message.message_id);
-      ctx.reply('Кормежка запланирована на ' + nextTime.format('YYYY-MM-DD HH:mm'), {
+      ctx.reply('Следующая кормежка запланирована на ' + nextTime.format('YYYY-MM-DD HH:mm'), {
+        reply_to_message_id: ctx.message?.message_id,
         reply_markup: {
           selective: true,
           remove_keyboard: true
