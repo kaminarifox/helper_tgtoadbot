@@ -12,7 +12,7 @@ export class ScheduleFeedCommand extends Command {
   init() {
     this.bot.hears(/^[Зз]апланировать (пир|кормежку) \d\d:\d\d$/, ctx => this.handle(ctx));
     this.bot.hears('Покормить жабу', ctx => this.handleAnswer(ctx));
-  } 
+  }
 
   private handle(ctx) {
     const [scheduleHours, scheduleMinutes] = ctx.update.message.text.split(' ').pop().split(':');
@@ -23,6 +23,7 @@ export class ScheduleFeedCommand extends Command {
     }
 
     this.botSchedule(nextTime.toDate(), ctx.update.message.message_id);
+    ctx.reply('Кормежка запланирована на ' + nextTime.format());
   }
 
   private handleAnswer(ctx) {
