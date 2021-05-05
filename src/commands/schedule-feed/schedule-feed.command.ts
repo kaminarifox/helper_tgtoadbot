@@ -28,7 +28,7 @@ export class ScheduleFeedCommand extends Command {
   }
 
   private handleAnswer(ctx: Context<Update> & {update: any}) {
-    if (ctx.update.message.reply_to_message.from.username === this.bot.botInfo?.username) {
+    if (ctx.update.message.reply_to_message?.from.username === this.bot.botInfo?.username) {
       const nextTime = moment().add(12, 'hours');
       this.botSchedule(nextTime.toDate(), ctx.update.message.message_id);
       ctx.reply('Кормежка запланирована на ' + nextTime.format('YYYY-MM-DD HH:mm'));
@@ -40,6 +40,7 @@ export class ScheduleFeedCommand extends Command {
       this.bot.telegram.sendMessage(Config.get('chatId'), 'Пришло время кормежки', {
         reply_to_message_id: fromId,
         reply_markup: {
+          selective: true,
           one_time_keyboard: true,
           resize_keyboard: true,
           keyboard: [[{text: 'Покормить жабу'}]]
