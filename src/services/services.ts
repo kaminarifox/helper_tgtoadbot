@@ -1,5 +1,3 @@
-import { RedisService } from "./redis.service";
-
 export class Services {
   private static instances: {[p: string]: any} = {}
 

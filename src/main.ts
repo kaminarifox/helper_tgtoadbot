@@ -1,15 +1,15 @@
 import { Telegraf } from 'telegraf';
 import { Services } from "./services/services";
 import { Commands } from "./commands/commands";
-require('dotenv').config()
+import { Config } from "./config";
 
 async function bootstrap() {
-  const bot = new Telegraf(process.env.API_TOKEN)
+  const bot = new Telegraf(Config.get('apiToken'));
 
   Services.init();
   Commands.init(bot);
 
-  return bot.launch()
+  return bot.launch();
 }
 bootstrap().then(() => {
   console.log('Bot is running!');
