@@ -1,7 +1,7 @@
 import { InlineCommand } from "./inline/inline.command";
 import { Context, Telegraf } from "telegraf";
-import { ScheduleFeedCommand } from "./schedule-feed/schedule-feed.command";
 import { Update } from "typegram";
+import { ScheduleFeedCommand } from "./scheduler/schedule-feed.command";
 
 export class Commands {
   static commands: {new(bot: Telegraf<Context<Update>>): any}[] = [

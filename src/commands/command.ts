@@ -8,7 +8,7 @@ export class Command {
     this.bot = bot;
   }
 
-  static init() {
+  init() {
     throw new Error('init() method not implemented');
   }
 }
