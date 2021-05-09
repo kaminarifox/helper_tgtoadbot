@@ -1,5 +1,6 @@
 export enum SchedulerCommand {
-  SchedulerList = 'schedulerList',
+  JobList = 'jobList',
+  RemoveJob = 'removeJob',
   ScheduleToadFeeding = 'scheduleToadFeeding',
   ScheduleFroggyFeeding = 'scheduleFroggyFeeding',
   FeedToad = 'feedToad',

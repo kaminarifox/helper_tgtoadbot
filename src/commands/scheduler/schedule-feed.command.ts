@@ -1,17 +1,27 @@
 import { Command } from '../command';
 import { Context, Telegraf } from 'telegraf';
 import { Update } from 'typegram';
-import { Config } from "../../config";
-import { Agenda, Job } from "agenda";
-import { SchedulerCommand } from "./scheduler-command";
-import { HearContext } from "../../types";
-import { scheduleToadFeeding, scheduleToadFeedingJob } from "./commands/schedule-toad-feeding";
-import { feedToad } from "./commands/feed-toad";
+import { Config } from '../../config';
+import { Agenda } from 'agenda';
+import { SchedulerCommand } from './scheduler-command';
+import { HearContext } from '../../types';
+import { scheduleToadFeeding, scheduleToadFeedingJob } from './commands/schedule-toad-feeding';
+import { feedToad } from './commands/feed-toad';
+import { jobList } from './commands/job-list';
+import { removeJob } from './commands/remove-job';
 
 export class ScheduleFeedCommand extends Command {
   agenda: Agenda;
 
   botHearsMap: Record<string, {pattern: RegExp, handler: (agenda: Agenda, ctx: HearContext) => {}}> = {
+    [SchedulerCommand.JobList]: {
+      pattern: /^мо[её] расписание$/ui,
+      handler: jobList,
+    },
+    [SchedulerCommand.RemoveJob]: {
+      pattern: /^отменить задачу ([a-z0-9]+)$/ui,
+      handler: removeJob,
+    },
     [SchedulerCommand.ScheduleToadFeeding]: {
       pattern: /^запланировать (пир|кормежку) (\d\d:\d\d$)/ui,
       handler: scheduleToadFeeding
@@ -28,7 +38,7 @@ export class ScheduleFeedCommand extends Command {
   }
 
   async init() {
-    await this.defineHears()
+    await this.defineHears();
     await this.defineJobs();
 
     return this.agenda.start();
@@ -38,7 +48,7 @@ export class ScheduleFeedCommand extends Command {
     for (const [command, {handler, pattern}] of Object.entries(this.botHearsMap)) {
       this.bot.hears(pattern, ctx => {
         handler(this.agenda, ctx);
-      })
+      });
     }
   }
 
