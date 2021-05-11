@@ -1,10 +1,9 @@
-import { Context, Telegraf } from "telegraf";
-import { Update } from "typegram";
+import { Bot, Context } from 'grammy';
 
 export class Command {
-  protected bot: Telegraf<Context<Update>>
+  protected bot: Bot;
 
-  constructor(bot: Telegraf<Context<Update>>) {
+  constructor(bot: Bot) {
     this.bot = bot;
   }
 

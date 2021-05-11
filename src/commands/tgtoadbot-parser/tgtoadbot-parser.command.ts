@@ -1,9 +1,8 @@
-import { Command } from "../command";
-import { Context, Telegraf } from "telegraf";
-import { Update } from "typegram";
+import { Command } from '../command';
+import { Bot, Context } from 'grammy';
 
 export class TgtoadbotParserCommand extends Command {
-  constructor(bot: Telegraf<Context<Update>>) {
+  constructor(bot: Bot) {
     super(bot);
   }
 

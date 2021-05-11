@@ -1,11 +1,10 @@
-import { Context, Telegraf } from 'telegraf';
 import { queryResults } from './query-results';
 import { Command } from '../command';
-import { Update } from 'typegram';
 import * as ru from 'convert-layout/ru';
+import { Bot } from 'grammy';
 
 export class InlineCommand extends Command {
-  constructor(bot: Telegraf<Context<Update>>) {
+  constructor(bot: Bot) {
     super(bot);
   }
 
@@ -21,7 +20,7 @@ export class InlineCommand extends Command {
         return (new RegExp(query, 'gium').test(v.title));
       });
 
-      ctx.answerInlineQuery(filtered);
+      return ctx.answerInlineQuery(filtered);
     });
   }
 }

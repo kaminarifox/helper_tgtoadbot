@@ -1,19 +1,18 @@
 import { Command } from '../command';
-import { Context, Telegraf } from 'telegraf';
-import { Update } from 'typegram';
 import { Config } from '../../config';
 import { Agenda } from 'agenda';
 import { SchedulerCommand } from './scheduler-command';
-import { HearContext } from '../../types';
-import { scheduleToadFeeding, scheduleToadFeedingJob } from './commands/schedule-toad-feeding';
+import { scheduleToadFeeding } from './commands/schedule-toad-feeding';
 import { feedToad } from './commands/feed-toad';
 import { jobList } from './commands/job-list';
 import { removeJob } from './commands/remove-job';
+import { scheduleToadFeedingJob } from './jobs/schedule-toad-feeding-job';
+import { Bot, Context } from 'grammy';
 
 export class ScheduleFeedCommand extends Command {
   agenda: Agenda;
 
-  botHearsMap: Record<string, {pattern: RegExp, handler: (agenda: Agenda, ctx: HearContext) => {}}> = {
+  botHearsMap: Record<string, {pattern: RegExp, handler: (agenda: Agenda, ctx: Context) => Promise<unknown>}> = {
     [SchedulerCommand.JobList]: {
       pattern: /^мо[её] расписание$/ui,
       handler: jobList,
@@ -32,12 +31,12 @@ export class ScheduleFeedCommand extends Command {
     },
   };
 
-  constructor(bot: Telegraf<Context<Update>>) {
+  constructor(bot: Bot<Context>) {
     super(bot);
     this.agenda = new Agenda({ db: {address: Config.get('mongo.agendaAddress')} });
   }
 
-  async init() {
+  async init(): Promise<unknown> {
     await this.defineHears();
     await this.defineJobs();
 

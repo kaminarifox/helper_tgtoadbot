@@ -1,14 +1,13 @@
 import { Agenda } from 'agenda';
-import { HearContext } from '../../../types';
 import * as moment from 'moment';
 import { SchedulerCommand } from '../scheduler-command';
-import { Message } from 'typegram';
+import { Context } from 'grammy';
 
 const commandTitleMap: Record<string, string> = {
   [SchedulerCommand.ScheduleToadFeeding]: 'Кормежка',
 };
 
-export async function jobList(agenda: Agenda, ctx: HearContext): Promise<Message.TextMessage> {
+export async function jobList(agenda: Agenda, ctx: Context): Promise<unknown> {
   const userId = ctx.from?.id;
   const jobs = await agenda.jobs({
     'data.ctx.update.message.from.id': userId,

@@ -1,16 +1,17 @@
-import { Telegraf } from 'telegraf';
-import { Services } from "./services/services";
-import { Commands } from "./commands/commands";
-import { Config } from "./config";
+import { Config } from './config';
+import { Bot } from 'grammy';
+import { Services } from './services/services';
+import { Commands } from './commands/commands';
 
 async function bootstrap() {
-  const bot = new Telegraf(Config.get('apiToken'));
+  const bot = new Bot(Config.get('apiToken'));
 
   Services.init();
   Commands.init(bot);
 
-  return bot.launch();
+  return bot.start();
 }
+
 bootstrap().then(() => {
   console.log('Bot is running!');
 });

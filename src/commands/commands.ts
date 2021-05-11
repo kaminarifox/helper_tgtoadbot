@@ -1,15 +1,14 @@
-import { InlineCommand } from "./inline/inline.command";
-import { Context, Telegraf } from "telegraf";
-import { Update } from "typegram";
-import { ScheduleFeedCommand } from "./scheduler/schedule-feed.command";
+import { InlineCommand } from './inline/inline.command';
+import { ScheduleFeedCommand } from './scheduler/schedule-feed.command';
+import { Bot, Context } from 'grammy';
 
 export class Commands {
-  static commands: {new(bot: Telegraf<Context<Update>>): any}[] = [
+  static commands: {new(bot: Bot<Context>): any}[] = [
     InlineCommand,
     ScheduleFeedCommand,
   ];
 
-  static init(bot: Telegraf<Context<Update>>) {
+  static init(bot: Bot<Context>) {
     for (const command of Commands.commands) {
       (new command(bot)).init();
     }
