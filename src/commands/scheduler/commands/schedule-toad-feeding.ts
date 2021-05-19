@@ -18,13 +18,13 @@ export async function scheduleToadFeeding(agenda: Agenda, ctx: Context): Promise
   const {api, ...clearedCtx} = ctx;
   await agenda.schedule(nextTime.toDate(), SchedulerCommand.ScheduleToadFeeding, {ctx: clearedCtx});
 
-  if (feedType === FeedType.FeedStandard) {
-    return ctx.reply('Кормежка запланирована на ' + nextTime.format('YYYY-MM-DD HH:mm'), {
-      reply_to_message_id: ctx.update.message?.message_id
-    });
-  } else {
+  if (feedType === FeedType.FeedPrime) {
     return ctx.reply('Пир запланирован на ' + nextTime.format('YYYY-MM-DD HH:mm'), {
       reply_to_message_id: ctx.update.message?.message_id
     });
   }
+
+  return ctx.reply('Кормежка запланирована на ' + nextTime.format('YYYY-MM-DD HH:mm'), {
+    reply_to_message_id: ctx.update.message?.message_id
+  });
 }

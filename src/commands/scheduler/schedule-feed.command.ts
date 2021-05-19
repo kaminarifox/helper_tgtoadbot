@@ -26,7 +26,7 @@ export class ScheduleFeedCommand extends Command {
       handler: scheduleToadFeeding
     },
     [SchedulerCommand.FeedToad]: {
-      pattern: /^покормить жабу$/ui,
+      pattern: /^(покормить|откормить) жабу$/ui,
       handler: feedToad,
     },
   };

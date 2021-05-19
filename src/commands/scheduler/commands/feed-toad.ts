@@ -11,7 +11,7 @@ export async function feedToad(agenda: Agenda, ctx: Context): Promise<unknown> {
     }
 
     const addHours = /^пришло время пира$/ui.test(replyToMessage) ? 6 : 12;
-    const nextTime = moment().add(addHours, 'hours');
+    const nextTime = moment().add(addHours, 'hours').set('seconds', 0);
 
     // Prevent serialization errors
     const {api, ...clearedCtx} = ctx;
