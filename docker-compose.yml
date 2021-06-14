@@ -3,27 +3,30 @@ services:
   bot:
     build:
       context: .
-    env_file: .env
-#    depends_on:
-#      - mongo
+    env_file:
+      - .env
+    volumes:
+    - './bin:/app/bin'
+    depends_on:
+      - mongo
 
-#  mongo:
-#    image: mongo
-#    restart: always
-#    volumes:
-#      - mongo:/data/db
-#    env_file:
-#      - .env
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - mongo:/data/db
+    env_file:
+      - .env
 
-#  mongo-express:
-#    image: mongo-express
-#    restart: always
-#    ports:
-#      - 8081:8081
-#    env_file:
-#      - .env
-#    depends_on:
-#      - mongo
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    env_file:
+      - .env
+    depends_on:
+      - mongo
 
 volumes:
   mongo:

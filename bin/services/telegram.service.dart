@@ -11,6 +11,8 @@ class TelegramService {
   TelegramService() {
     final config = GetIt.I.get<ConfigService>();
 
+    print(config.get('apiToken'));
+
     telegram = Telegram(config.get<String>('apiToken'));
     teledart = TeleDart(telegram, Event());
 

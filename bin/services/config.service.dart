@@ -10,12 +10,7 @@ class ConfigService {
       'apiToken': env['API_TOKEN'],
       'chatId': env['CHAT_ID'],
       'mongo': {
-        'host': env['MONGO_HOST'],
-        'rootUsername': env['MONGO_ROOT_USERNAME'],
-        'rootPassword': env['MONGO_ROOT_PASSWORD'],
-        'agendaUsername': env['MONGO_AGENDA_USERNAME'],
-        'agendaPassword': env['MONGO_AGENDA_PASSWORD'],
-        'agendaAddress': 'mongodb://${env['MONGO_AGENDA_USERNAME']}:${env['MONGO_AGENDA_PASSWORD']}@${env['MONGO_HOST']}/agenda',
+        'url': env['MONGO_URL'],
       }
     };
   }
