@@ -2,9 +2,8 @@ import 'dart:async';
 import 'package:get_it/get_it.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:rxdart/rxdart.dart';
-import '../types/enums.dart';
-import '../types/scheduler_job.dart';
-import 'mongo.service.dart';
+import '../../common/services/mongo.service.dart';
+import 'scheduler_types.dart';
 
 class SchedulerService {
   late final MongoService _mongo;

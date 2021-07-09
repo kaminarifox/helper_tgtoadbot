@@ -1,6 +1,11 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
-import 'enums.dart';
+import '../../common/types/enums.dart';
+
+enum JobStatus {
+  active,
+  canceled
+}
 
 class SchedulerJob {
   ObjectId? id;
@@ -29,4 +34,21 @@ class SchedulerJob {
       'data': data,
     };
   }
+
+  int getFromId() {
+    return data!['from']['id'];
+  }
+
+  String getFromUsername() {
+    return data!['from']['username'];
+  }
+}
+
+class SchedulerPattern {
+  RegExp pattern;
+  HelperCommand command;
+
+  SchedulerPattern(patternString, command):
+        pattern = RegExp(patternString, unicode: true, caseSensitive: false),
+        command = command;
 }

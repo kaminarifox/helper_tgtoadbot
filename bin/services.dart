@@ -1,9 +1,9 @@
 import 'package:get_it/get_it.dart';
 
-import 'services/config.service.dart';
-import 'services/mongo.service.dart';
-import 'services/scheduler.service.dart';
-import 'services/telegram.service.dart';
+import 'common/services/config.service.dart';
+import 'common/services/mongo.service.dart';
+import 'commands/scheduler/scheduler.service.dart';
+import 'common/services/telegram.service.dart';
 
 class Services {
   static void setup() {

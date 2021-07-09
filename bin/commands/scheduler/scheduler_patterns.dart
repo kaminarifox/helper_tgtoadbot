@@ -1,9 +1,7 @@
-import '../../types/enums.dart';
+import '../../common/types/enums.dart';
+import 'scheduler_types.dart';
 
 var schedulerPatterns = [
-  {
-    'pattern': RegExp(r'^запланировать кормежку (\d\d:\d\d)$',
-        unicode: true, caseSensitive: false),
-    'command': HelperCommand.scheduleToadFeeding,
-  },
+  SchedulerPattern(r'^покормить жабу$', HelperCommand.feedToad),
+  SchedulerPattern(r'^запланировать кормежку (\d\d:\d\d)$', HelperCommand.scheduleToadFeeding)
 ];
