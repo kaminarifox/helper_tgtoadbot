@@ -16,16 +16,12 @@ class SchedulerCommands {
     schedulerService = GetIt.I.get<SchedulerService>();
     final telegramService  = GetIt.I.get<TelegramService>();
 
-    telegramService.teledart.onMessage().listen((message) {
-      _handleIncomingMessage(message);
+    schedulerPatterns.forEach((pattern) {
+      telegramService.teledart.onMessage(keyword: pattern.pattern)
+          .listen(_handleIncomingMessage);
     });
 
-    schedulerService.jobStream.stream.listen((job) {
-      _handleJob(job);
-      // telegramService.teledart.telegram.sendMessage(
-      //     job.data?['chat']['id'],
-      //     'Hello!', );
-    });
+    schedulerService.jobStream.stream.listen(_handleJob);
   }
 
   void _handleIncomingMessage(TeleDartMessage message) {
