@@ -5,14 +5,16 @@
 ```
 cp .env.sample .env
 ```
+
 ### 2. Проинициализировать mongo, добавить пользователя для планировщика задач
 ```
 $ docker-compose up -d mongo
 $ docker-compose run mongo bash
-$ mongo --host mongo -u root
-> use agenda
-> db.createUser({user: "agenda", pwd: "agenda", roles: [{role: "readWrite", db: "agenda"}]})
+$ mongo -u root
+> use helper
+> db.createUser({user: "helper", pwd: "helper", roles: [{role: "readWrite", db: "helper"}]})
 ```
+
 ### 3. Выйти из контейнера mongo и запустить все остальные сервисы
 ```
 $ docker-compose up -d

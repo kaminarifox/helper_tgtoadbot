@@ -24,10 +24,10 @@ class SchedulerCommands {
     schedulerService.jobStream.stream.listen(_handleJob);
   }
 
-  void _handleIncomingMessage(TeleDartMessage message) {
-    schedulerPatterns.forEach((element) {
+  Future<void> _handleIncomingMessage(TeleDartMessage message) async {
+    schedulerPatterns.forEach((element) async {
       if (element.pattern.hasMatch(message.text)) {
-        _executeCommand(element.command, message);
+        await _executeCommand(element.command, message);
       }
     });
   }
@@ -36,23 +36,26 @@ class SchedulerCommands {
     notifyFeedingTime(job);
   }
 
-  void _executeCommand(HelperCommand command, TeleDartMessage message) {
+  Future<void> _executeCommand(HelperCommand command, TeleDartMessage message) async {
     switch (command) {
       case HelperCommand.scheduleToadFeeding:
-        final responseMessage = scheduleToadFeeding(message);
-        message.reply(responseMessage);
+        await scheduleToadFeeding(message);
         break;
       case HelperCommand.feedToad:
-        final responseMessage = feedToad(message);
-        message.reply(responseMessage);
+        await feedToad(message);
+        break;
+      case HelperCommand.subscribeToad:
+        await subscribeToad(message);
+        break;
+      case HelperCommand.unsubscribeToad:
+      case HelperCommand.assembleGang:
+        await unsubscribeToad(message, command);
+        break;
+      case HelperCommand.toadSent:
+        toadSent(message);
         break;
       default:
         break;
     }
   }
-
-  // void _sendResponse(HelperCommand, ) {
-  //   Message.fromJson({}).
-  //
-  // }
 }
