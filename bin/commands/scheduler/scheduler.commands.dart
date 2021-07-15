@@ -39,35 +39,20 @@ class SchedulerCommands {
   Future<void> _executeCommand(HelperCommand command, TeleDartMessage message) async {
     switch (command) {
       case HelperCommand.scheduleToadFeeding:
-        final responseMessage = scheduleToadFeeding(message);
-        message.reply(responseMessage);
+        await scheduleToadFeeding(message);
         break;
       case HelperCommand.feedToad:
-        final responseMessage = feedToad(message);
-        message.reply(responseMessage);
+        await feedToad(message);
         break;
       case HelperCommand.subscribeToad:
-        final responseMessage = await subscribeToad(message);
-        message.reply(responseMessage);
+        await subscribeToad(message);
         break;
       case HelperCommand.unsubscribeToad:
       case HelperCommand.assembleGang:
-        final responseMessage = await unsubscribeToad(message, command);
-        if (responseMessage.length > 0) {
-          message.reply(responseMessage);
-        }
+        await unsubscribeToad(message, command);
         break;
       case HelperCommand.toadSent:
-        final responseMessage = await toadSent(message);
-        if (responseMessage.length > 0) {
-          message.reply(
-            responseMessage,
-            parse_mode: 'Markdown',
-            reply_markup: ReplyKeyboardMarkup(keyboard: [
-              [KeyboardButton(text: 'Взять жабу')]
-            ], one_time_keyboard: true, resize_keyboard: true, selective: true)
-          );
-        }
+        toadSent(message);
         break;
       default:
         break;
