@@ -64,23 +64,16 @@ Future<void> unsubscribeToad(TeleDartMessage message, HelperCommand command) asy
     'chat_id': message.chat.id
   });
 
-  var msg = '';
-
   if (ret.nRemoved > 0) {
     if (command == HelperCommand.assembleGang) {
-      msg = 'Поздравляю! Я больше не буду пинговать тебя';
+      message.reply('Поздравляю! Я больше не буду пинговать тебя');
     } else {
-      msg = 'Ок, я больше не буду пинговать тебя.';
+      message.reply('Ок, я больше не буду пинговать тебя.');
     }
-  } else {
-    if (command != HelperCommand.assembleGang) {
-      msg = 'Ало, ты и так не подписан!';
-    } else {
-      return;
+  } else if (command != HelperCommand.assembleGang) {
+      message.reply('Ало, ты и так не подписан!');
     }
   }
-
-  message.reply(msg);
 }
 
 Future<void> toadSent(TeleDartMessage message) async {
