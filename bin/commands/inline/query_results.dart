@@ -1,5 +1,4 @@
 import 'package:teledart/model.dart';
-import 'package:slugify/slugify.dart';
 
 final queryResults = [
   {'id': '1', 'title': 'Брак > Вознаграждение', 'value': 'Брак вознаграждение'},
@@ -191,4 +190,4 @@ final queryResults = [
     description: e['description'],
     id: e['id'],
     input_message_content:
-        (InputTextMessageContent.fromJson({'message_text': 'tset'}))));
+        (InputTextMessageContent.fromJson({'message_text': e['value']}))));
