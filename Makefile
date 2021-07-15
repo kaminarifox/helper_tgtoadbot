@@ -10,4 +10,4 @@ shell:
 down:
 	docker-compose down
 test:
-	echo "No test specified"
+	docker-compose exec bot dart test
