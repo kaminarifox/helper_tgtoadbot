@@ -24,10 +24,10 @@ class SchedulerCommands {
     schedulerService.jobStream.stream.listen(_handleJob);
   }
 
-  void _handleIncomingMessage(TeleDartMessage message) {
-    schedulerPatterns.forEach((element) {
+  Future<void> _handleIncomingMessage(TeleDartMessage message) async {
+    schedulerPatterns.forEach((element) async {
       if (element.pattern.hasMatch(message.text)) {
-        _executeCommand(element.command, message);
+        await _executeCommand(element.command, message);
       }
     });
   }
@@ -36,7 +36,7 @@ class SchedulerCommands {
     notifyFeedingTime(job);
   }
 
-  void _executeCommand(HelperCommand command, TeleDartMessage message) {
+  Future<void> _executeCommand(HelperCommand command, TeleDartMessage message) async {
     switch (command) {
       case HelperCommand.scheduleToadFeeding:
         final responseMessage = scheduleToadFeeding(message);
@@ -47,24 +47,30 @@ class SchedulerCommands {
         message.reply(responseMessage);
         break;
       case HelperCommand.subscribeToad:
-        final responseMessage = subscribeToad(message);
+        final responseMessage = await subscribeToad(message);
         message.reply(responseMessage);
         break;
       case HelperCommand.unsubscribeToad:
-        final responseMessage = unsubscribeToad(message);
-        message.reply(responseMessage);
+      case HelperCommand.assembleGang:
+        final responseMessage = await unsubscribeToad(message, command);
+        if (responseMessage.length > 0) {
+          message.reply(responseMessage);
+        }
         break;
       case HelperCommand.toadSent:
-        final responseMessage = toadSent(message);
-        message.reply(responseMessage);
+        final responseMessage = await toadSent(message);
+        if (responseMessage.length > 0) {
+          message.reply(
+            responseMessage,
+            parse_mode: 'Markdown',
+            reply_markup: ReplyKeyboardMarkup(keyboard: [
+              [KeyboardButton(text: 'Взять жабу')]
+            ], one_time_keyboard: true, resize_keyboard: true, selective: true)
+          );
+        }
         break;
       default:
         break;
     }
   }
-
-  // void _sendResponse(HelperCommand, ) {
-  //   Message.fromJson({}).
-  //
-  // }
 }

@@ -9,9 +9,14 @@ import 'scheduler.service.dart';
 import 'scheduler_types.dart';
 import 'package:timezone/standalone.dart' as tz;
 
+import '../../common/services/mongo.service.dart';
+
 final schedulerService = GetIt.I.get<SchedulerService>();
 final formatter = DateFormat('yyyy-MM-dd HH:mm');
 final location = tz.getLocation('Europe/Kiev');
+
+final MongoService _mongo = GetIt.I.get<MongoService>();
+final _subscribers = _mongo.db.collection('toadSubscribers');
 
 String scheduleToadFeeding(TeleDartMessage message) {
   var matches = RegExp(r'((\d\d):(\d\d))').firstMatch(message.text);
@@ -22,7 +27,7 @@ String scheduleToadFeeding(TeleDartMessage message) {
   var next = TZDateTime(location, now.year, now.month, now.day, hours, minutes);
   if (now.isAfter(next)) {
     next = TZDateTime.fromMillisecondsSinceEpoch(location,
-        next.millisecondsSinceEpoch + 86400000);
+        next.millisecondsSinceEpoch + Duration(hours: 24).inMilliseconds);
   }
 
   var job = SchedulerJob(
@@ -37,20 +42,56 @@ String scheduleToadFeeding(TeleDartMessage message) {
   return 'Кормежка запланирована на ' + formatter.format(next);
 }
 
-String feedToad(TeleDartMessage messsage) {
+String feedToad(TeleDartMessage message) {
   return '';
 }
 
-String subscribeToad(TeleDartMessage messsage) {
-  // TODO: add user to subscription
-  return 'Ты подписался на рассылку, я буду пинговать тебя, когда в беседу пришлют жабу.';
+Future<String> subscribeToad(TeleDartMessage message) async {
+  await _subscribers.insertOne({
+    'user_id': message.from.id,
+    'user_name': message.from.first_name,
+    'chat_id': message.chat.id
+  });
+  return 'Пипяу! Теперь ты подписан на рассылку, и я буду пинговать тебя, когда можно будет взять жабу.';
 }
 
-String unsubscribeToad(TeleDartMessage messsage) {
-  // TODO: remove user from subscription
-  return 'Ок, я больше не буду пинговать тебя.';
+Future<String> unsubscribeToad(TeleDartMessage message, HelperCommand command) async {
+  final ret = await _subscribers.deleteOne({
+    'user_id': message.from.id,
+    'chat_id': message.chat.id
+  });
+
+  if (ret.nRemoved > 0) {
+    var msg;
+
+    if (command == HelperCommand.assembleGang) {
+      msg = 'Поздравляю! Я больше не буду пинговать тебя';
+    } else {
+      msg = 'Ок, я больше не буду пинговать тебя.';
+    }
+
+    return msg;
+  } else {
+    if (command != HelperCommand.assembleGang) {
+      return 'Ало, ты и так не подписан!';
+    } else {
+      return '';
+    }
+  }
 }
 
-String toadSent(TeleDartMessage messsage) {
-  return 'Эй, тут жаба!';  // TODO: add user mentions
+Future<String> toadSent(TeleDartMessage message) async {
+  final subscribers = await _subscribers.find({'chat_id': message.chat.id});
+
+  if (subscribers.length == 0) {
+    return '';
+  }
+
+  final mentions = await subscribers.map((sub) {
+    final user_id = sub["user_id"];
+    final user_name = sub["user_name"];
+    return '[${user_name}](tg://user?id=${user_id})';
+  }).join(', ');
+
+  return 'Эй, тут жаба!\n\n${mentions}';
 }
