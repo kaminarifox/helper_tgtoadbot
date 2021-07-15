@@ -38,6 +38,19 @@ String scheduleToadFeeding(TeleDartMessage message) {
 }
 
 String feedToad(TeleDartMessage messsage) {
-
   return '';
+}
+
+String subscribeToad(TeleDartMessage messsage) {
+  // TODO: add user to subscription
+  return 'Ты подписался на рассылку, я буду пинговать тебя, когда в беседу пришлют жабу.';
+}
+
+String unsubscribeToad(TeleDartMessage messsage) {
+  // TODO: remove user from subscription
+  return 'Ок, я больше не буду пинговать тебя.';
+}
+
+String toadSent(TeleDartMessage messsage) {
+  return 'Эй, тут жаба!';  // TODO: add user mentions
 }

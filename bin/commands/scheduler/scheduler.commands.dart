@@ -46,6 +46,18 @@ class SchedulerCommands {
         final responseMessage = feedToad(message);
         message.reply(responseMessage);
         break;
+      case HelperCommand.subscribeToad:
+        final responseMessage = subscribeToad(message);
+        message.reply(responseMessage);
+        break;
+      case HelperCommand.unsubscribeToad:
+        final responseMessage = unsubscribeToad(message);
+        message.reply(responseMessage);
+        break;
+      case HelperCommand.toadSent:
+        final responseMessage = toadSent(message);
+        message.reply(responseMessage);
+        break;
       default:
         break;
     }
